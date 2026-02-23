@@ -54,7 +54,6 @@ struct WelcomeView: View {
                             .font(.footnote).bold()
                             .foregroundStyle(isNameValid ? Color.textValidation : Color.black)
                             .frame(width: totalWidth)
-                            .opacity(1.0 - Double(offset / (totalWidth - buttonSize)))
                         ZStack {
                             RoundedRectangle(cornerRadius: 15)
                                 .fill(isNameValid ? Color.button.opacity(0.7) : .black.opacity(0.7))

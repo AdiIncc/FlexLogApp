@@ -10,34 +10,49 @@ import SwiftUI
 struct HomeView: View {
     @AppStorage("username") var username: String = ""
     @State var isMenuOpen: Bool = false
-    
-    fileprivate func MenuView() -> some View {
-        ZStack(alignment: .trailing) {
-            
-            GeometryReader { proxy in
-                HStack(spacing: 0) {
-                    Spacer()
-                    Rectangle()
-                        .fill(Color.menuBackground)
-                        .frame(width: proxy.size.width / 2.1)
-                        .shadow(color: .black.opacity(0.3), radius: 20, x: -20)
-                }
-            }
-            .transition(.move(edge: .trailing))
-        }
-        .ignoresSafeArea()
-        
-    }
+    @State var addWorkoutIsPresented: Bool = false
     
     var body: some View {
         NavigationStack {
-            ZStack {
+            ZStack(alignment: .bottom) {
                 Color.appBackground
                     .ignoresSafeArea()
-                ScrollView {
-                    VStack {
-                        VideoControllerView(videoName: "gymVideo")
-                        Spacer()
+                VStack(spacing: 0) {
+                    Text("Workouts")
+                        .font(.system(size: 25, weight: .semibold))
+                        .foregroundStyle(Color.text)
+                        .frame(maxWidth: .infinity)
+                        .padding(.bottom)
+                    ScrollView {
+                        LazyVStack {
+                            VideoControllerView(videoName: "gymVideo")
+                            ForEach(0..<10) { i in
+                                RoundedRectangle(cornerRadius: 15)
+                                    .fill(Color.white.opacity(0.1))
+                                    .frame(height: 100)
+                                    .overlay(
+                                        Text("Workout \(i)")
+                                            .foregroundStyle(.white)
+                                    )
+                                    .padding(.horizontal)
+                            }
+                        }
+                        .padding(.bottom, 100)
+                    }
+                    .overlay(alignment: .bottom) {
+                        Button {
+                            addWorkoutIsPresented = true
+                        } label: {
+                            Image(systemName: "plus")
+                                .font(.system(size: 24, weight: .medium))
+                                .padding(20)
+                                .foregroundStyle(.white)
+                                .background(Color.button)
+                                .clipShape(Circle())
+                        }
+                        .sheet(isPresented: $addWorkoutIsPresented) {
+                            AddWorkoutView()
+                        }
                     }
                 }
                 .blur(radius: isMenuOpen ? 5 : 0)
@@ -50,23 +65,24 @@ struct HomeView: View {
                             }
                         }
                         .transition(.opacity)
-                    MenuView()
+                    SettingsView(isMenuOpen: $isMenuOpen)
                         .transition(.move(edge: .trailing))
                         .zIndex(1)
                 }
             }
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        withAnimation(.easeInOut) {
+                        withAnimation(.spring()) {
                             isMenuOpen.toggle()
                         }
                     }
                     label: {
-                        Image(systemName: "line.3.horizontal")
+                        Image(systemName: isMenuOpen ? "xmark" : "line.3.horizontal")
                             .foregroundStyle(.white)
+                            .font(.system(size: 20))
                     }
-                    
                 }
             }
         }
