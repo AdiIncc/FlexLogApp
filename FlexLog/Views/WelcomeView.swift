@@ -9,7 +9,8 @@ import SwiftUI
 
 struct WelcomeView: View {
     
-    @AppStorage("username") var username: String = ""
+    @Environment(UserSession.self) var session: UserSession
+    @State private var username: String = ""
     @State private var isLogged = false
     @State private var offset: CGFloat = 0
     @State var viewState = CGSize(width: 0, height: 50)
@@ -78,6 +79,7 @@ struct WelcomeView: View {
                                     if offset > maxOffSet * 0.8 {
                                         withAnimation(.spring()) {
                                             offset = maxOffSet
+                                            session.currentUser = User(id: UUID(), username: username)
                                             isLogged = true
                                         }
                                     }
@@ -106,4 +108,5 @@ struct WelcomeView: View {
 
 #Preview {
     WelcomeView()
+        .environment(UserSession())
 }

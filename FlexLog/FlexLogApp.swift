@@ -9,9 +9,19 @@ import SwiftUI
 
 @main
 struct FlexLogApp: App {
+    
+    @State var session = UserSession()
+    
     var body: some Scene {
         WindowGroup {
-            WelcomeView()
+            if session.currentUser == nil {
+                WelcomeView()
+                    .environment(session)
+            }
+            else {
+                HomeView()
+                    .environment(session)
+            }
         }
     }
 }

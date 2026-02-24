@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct HomeView: View {
-    @AppStorage("username") var username: String = ""
+    
     @State var isMenuOpen: Bool = false
     @State var addWorkoutIsPresented: Bool = false
+    @State var workouts: [Workout] = [Workout(title: "Arms/Legs", date: Date(), isCompleted: false, exercises: [Exercise(name: "Barbell Curl", sets: 2, reps: 8, weight: 20)])]
     
     var body: some View {
         NavigationStack {
@@ -26,15 +27,8 @@ struct HomeView: View {
                     ScrollView {
                         LazyVStack {
                             VideoControllerView(videoName: "gymVideo")
-                            ForEach(0..<10) { i in
-                                RoundedRectangle(cornerRadius: 15)
-                                    .fill(Color.white.opacity(0.1))
-                                    .frame(height: 100)
-                                    .overlay(
-                                        Text("Workout \(i)")
-                                            .foregroundStyle(.white)
-                                    )
-                                    .padding(.horizontal)
+                            ForEach($workouts) { workout in
+                                ListCellView(workout: workout)
                             }
                         }
                         .padding(.bottom, 100)

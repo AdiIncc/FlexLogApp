@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @AppStorage("username") var username: String = ""
+    @Environment(UserSession.self) var session: UserSession
     @Binding var isMenuOpen: Bool
     
     var body: some View {
@@ -23,7 +23,7 @@ struct SettingsView: View {
                         .ignoresSafeArea()
                         .overlay {
                             VStack {
-                                Text("Hi, \(username)")
+                                Text("Hi, \(session.currentUser?.username ?? "Guest")")
                                     .foregroundStyle(Color.text)
                                     .font(.system(size: 20, weight: .bold))
                                 Rectangle()
@@ -43,4 +43,5 @@ struct SettingsView: View {
 
 #Preview {
     SettingsView(isMenuOpen: .constant(true))
+        .environment(UserSession())
 }
