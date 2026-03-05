@@ -35,12 +35,7 @@ struct WelcomeView: View {
                         .font(.system(size: 15, weight: .semibold))
                         .foregroundStyle(Color.text)
                     TextField("Username", text: $username)
-                        .padding(5)
-                        .background(
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(.white)
-                                .shadow(color: .white.opacity(0.7), radius: 10, x: 0, y: 5)
-                        )
+                        .textFieldStyle(MainTextField())
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
                     Text("The username should be at least 3 characters long.")

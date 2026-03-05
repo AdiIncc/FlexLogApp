@@ -9,9 +9,9 @@ import SwiftUI
 
 struct HomeView: View {
     
-    @State var isMenuOpen: Bool = false
-    @State var addWorkoutIsPresented: Bool = false
-    @State var workouts: [Workout] = [Workout(title: "Arms/Legs", date: Date(), isCompleted: false, exercises: [Exercise(name: "Barbell Curl", sets: 2, reps: 8, weight: 20)])]
+    @State private var isMenuOpen: Bool = false
+    @State private var addWorkoutIsPresented: Bool = false
+    @State private var workouts: [Workout] = [Workout(title: "Arms/Legs", date: Date(), isCompleted: false, exercises: [Exercise(name: "Barbell Curl", sets: 2, reps: 8, weight: 20)])]
     
     var body: some View {
         NavigationStack {
@@ -22,7 +22,6 @@ struct HomeView: View {
                     Text("Workouts")
                         .font(.system(size: 25, weight: .semibold))
                         .foregroundStyle(Color.text)
-                        .frame(maxWidth: .infinity)
                         .padding(.bottom)
                     ScrollView {
                         LazyVStack {
@@ -45,7 +44,9 @@ struct HomeView: View {
                                 .clipShape(Circle())
                         }
                         .sheet(isPresented: $addWorkoutIsPresented) {
-                            AddWorkoutView()
+                            AddWorkoutView(workouts: $workouts)
+                                .presentationDragIndicator(.visible)
+                                .preferredColorScheme(.dark)
                         }
                     }
                 }
@@ -85,4 +86,5 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
+        .environment(UserSession())
 }

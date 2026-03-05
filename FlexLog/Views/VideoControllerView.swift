@@ -35,7 +35,7 @@ struct VideoControllerView: View {
                             .clipShape(Circle())
                             .padding(15)
                     }
-                    .onAppear { viewModel.play()}
+                    .onAppear { viewModel.pause()}
                     .onDisappear { viewModel.pause() }
             }
         }

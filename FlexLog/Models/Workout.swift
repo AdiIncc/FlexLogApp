@@ -20,4 +20,11 @@ struct Workout: Identifiable {
         dateFormatter.locale = Locale(identifier: "en_US")
         return dateFormatter.string(from: date)
     }
+    
+    init(title: String, date: Date = Date(), isCompleted: Bool = false, exercises: [Exercise] = []) {
+        self.title = title
+        self.date = date
+        self.isCompleted = isCompleted
+        self.exercises = exercises
+    }
 }

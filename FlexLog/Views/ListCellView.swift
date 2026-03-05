@@ -8,41 +8,59 @@
 import SwiftUI
 
 struct ListCellView: View {
-    
     @Binding var workout: Workout
+    @State private var showExercises = false
     
     var body: some View {
-                RoundedRectangle(cornerRadius: 15)
-                    .fill(Color.white.opacity(0.1))
-                    .frame(height: 100)
-                    .overlay(
-                        HStack(alignment: .center, content: {
-                            VStack(alignment: .leading, spacing: 10) {
-                                Text(workout.createdDate)
-                                    .font(.system(size: 14, weight: .semibold))
+        ZStack {
+            RoundedRectangle(cornerRadius: 15)
+                .fill(Color.white.opacity(0.1))
+                .frame(height: 100)
+                .overlay(
+                    VStack(spacing: 0) {
+                        HStack(alignment: .center) {
+                            Text(workout.createdDate)
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundStyle(.white)
+                            Spacer()
+                            Button {
+                                showExercises = true
+                            } label: {
+                                Image(systemName: "ellipsis")
+                                    .font(.system(size: 20))
                                     .foregroundStyle(.white)
-                                    .padding(.top)
-                                Text(workout.title)
-                                    .font(.system(size: 16, weight: .semibold))
-                                    .lineLimit(1)
-                                    .foregroundStyle(.white)
-                                Spacer()
                             }
-                            
+                        }
+                        .padding(.horizontal)
+                        .frame(maxHeight: .infinity)
+                        Rectangle()
+                            .fill(.white)
+                            .frame(height: 1)
+                            .frame(maxWidth: .infinity)
+                        HStack(alignment: .center) {
+                            Text(workout.title)
+                                .font(.system(size: 16, weight: .semibold))
+                                .foregroundStyle(.white)
+                                .lineLimit(1)
                             Spacer()
                             Image(systemName: workout.isCompleted ? "checkmark.circle" : "circle")
                                 .font(.system(size: 20))
                                 .foregroundStyle(workout.isCompleted ? .green : .white)
-                                .scaleEffect(workout.isCompleted ? 1.2 : 1.0)
                                 .onTapGesture {
                                     withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
                                         workout.isCompleted.toggle()
                                     }
                                 }
-                        })
-                        .padding()
-                    )
-                    .padding(.horizontal)
+                        }
+                        .padding(.horizontal)
+                        .frame(maxHeight: .infinity)
+                    }
+                )
+                .padding(.horizontal)
+                .navigationDestination(isPresented: $showExercises) {
+                    ExerciseView(workout: $workout)
+                }
+        }
     }
 }
 
