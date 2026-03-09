@@ -28,3 +28,14 @@ struct Workout: Identifiable {
         self.exercises = exercises
     }
 }
+
+extension Workout {
+    var totalVolume: Double {
+        exercises.reduce(0) { sum, exercise in
+            let sets = Double(exercise.sets)
+            let reps = Double(exercise.reps)
+            let weight = exercise.weight
+            return sum + (sets * reps * weight)
+        }
+    }
+}

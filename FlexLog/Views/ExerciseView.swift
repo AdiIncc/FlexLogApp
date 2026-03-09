@@ -15,6 +15,7 @@ struct ExerciseView: View {
     @State var sets: String = ""
     @State var reps: String = ""
     @State var weight: String = ""
+    @AppStorage("measure_unit") private var measureUnit: MeasureUnitModel = .kg
     
     var isInputValid: Bool {
         !exerciseName.isEmpty &&
@@ -42,7 +43,7 @@ struct ExerciseView: View {
                         .keyboardType(.numberPad)
                     ColumnView(text: $reps, label: "Reps", width: 60)
                         .keyboardType(.numberPad)
-                    ColumnView(text: $weight, label: "Kgs", width: 60)
+                    ColumnView(text: $weight, label: measureUnit.rawValue, width: 60)
                         .keyboardType(.decimalPad)
                     Spacer()
                 }

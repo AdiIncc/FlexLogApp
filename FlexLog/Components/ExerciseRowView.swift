@@ -13,10 +13,11 @@ struct ExerciseRowView: View {
     let sets: Int
     let reps: Int
     let weight: Double
+    @AppStorage("measure_unit") private var measureUnit: MeasureUnitModel = .kg
     
     var createdText: AttributedString {
         var result = AttributedString("\(sets) x \(reps) @ \(String(format: "%.1f", weight)) ")
-        var weight = AttributedString("kg")
+        var weight = AttributedString(measureUnit.rawValue)
         weight.foregroundColor = .green
         weight.font = .system(size: 14, weight: .bold)
         result.append(weight)
