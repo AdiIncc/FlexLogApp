@@ -10,13 +10,7 @@ import SwiftUI
 struct WelcomeView: View {
     
     @Environment(UserSession.self) var session: UserSession
-    @State private var username: String = ""
-    @State private var isLogged = false
-    @State private var offset: CGFloat = 0
-    @State var viewState = CGSize(width: 0, height: 50)
-    var isNameValid: Bool {
-        username.trimmingCharacters(in: .whitespacesAndNewlines).count >= 3
-    }
+    @State private var viewModel = WelcomeViewModel()
     let horizontalPadding: CGFloat = 15
     let buttonSize: CGFloat = 70
     
@@ -34,7 +28,7 @@ struct WelcomeView: View {
                     Text("Please enter your username!")
                         .font(.system(size: 15, weight: .semibold))
                         .foregroundStyle(Color.text)
-                    TextField("Username", text: $username)
+                    TextField("Username", text: $viewModel.username)
                         .textFieldStyle(MainTextField())
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
@@ -46,56 +40,56 @@ struct WelcomeView: View {
                         RoundedRectangle(cornerRadius: 15)
                             .fill(.white.opacity(0.9))
                             .frame(width: totalWidth, height: buttonSize + 10)
-                        Text(isNameValid ? "Ready to crush it! " : "Enter username to start!")
+                        Text(viewModel.isNameValid ? "Ready to crush it! " : "Enter username to start!")
                             .font(.footnote).bold()
-                            .foregroundStyle(isNameValid ? Color.textValidation : Color.black)
+                            .foregroundStyle(viewModel.isNameValid ? Color.textValidation : Color.black)
                             .frame(width: totalWidth)
                         ZStack {
                             RoundedRectangle(cornerRadius: 15)
-                                .fill(isNameValid ? Color.button.opacity(0.7) : .black.opacity(0.7))
+                                .fill(viewModel.isNameValid ? Color.button.opacity(0.7) : .black.opacity(0.7))
                                 .frame(width: buttonSize, height: buttonSize)
                             Image(systemName: "chevron.right")
                                 .foregroundStyle(.white)
                                 .font(.system(size: 24, weight: .bold))
                         }
                         .padding(.leading, 5)
-                        .offset(x: offset)
+                        .offset(x: viewModel.offset)
                         .gesture(
-                            isNameValid ?
+                            viewModel.isNameValid ?
                             DragGesture()
                             .onChanged({ value in
                                 let maxOffSet = totalWidth - buttonSize - 10
                                 if value.translation.width > 0 && value.translation.width <= maxOffSet {
-                                    offset = value.translation.width
+                                    viewModel.offset = value.translation.width
                                 }
                             })
                                 .onEnded({ value in
                                     let maxOffSet = totalWidth - buttonSize - 10
-                                    if offset > maxOffSet * 0.8 {
+                                    if viewModel.offset > maxOffSet * 0.8 {
                                         withAnimation(.spring()) {
-                                            offset = maxOffSet
-                                            session.currentUser = User(id: UUID(), username: username)
-                                            isLogged = true
+                                            viewModel.offset = maxOffSet
+                                            session.currentUser = User(id: UUID(), username: viewModel.username)
+                                            viewModel.isLogged = true
                                         }
                                     }
                                     else {
                                         withAnimation(.spring()) {
-                                            offset = 0
+                                            viewModel.offset = 0
                                         }
                                     }
                                 })
                             : nil
                         )
                     }
-                    .opacity(isNameValid ? 1.0 : 0.5)
-                    .animation(.easeInOut, value: isNameValid)
+                    .opacity(viewModel.isNameValid ? 1.0 : 0.5)
+                    .animation(.easeInOut, value: viewModel.isNameValid)
                     .frame(width: totalWidth)
                     .padding(.top, 20)
                 }
                 .padding(.horizontal, 15)
             }
         }
-        .fullScreenCover(isPresented: $isLogged) {
+        .fullScreenCover(isPresented: $viewModel.isLogged) {
             HomeView()
         }
     }

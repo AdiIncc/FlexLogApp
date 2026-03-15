@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AddWorkoutView: View {
     @Binding var workouts: [Workout]
-    @State private var workoutTitle: String = ""
+    @State private var viewModel = AddWorkoutViewModel()
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -25,11 +25,11 @@ struct AddWorkoutView: View {
                 Text("Today's Workout Name")
                     .font(.system(size: 20, weight: .semibold))
                     .foregroundStyle(Color.text)
-                TextField("Title", text: $workoutTitle)
+                TextField("Title", text: $viewModel.workoutTitle)
                     .textFieldStyle(MainTextField())
                 Button {
-                    if !workoutTitle.isEmpty {
-                        let newWorkout = Workout(title: workoutTitle)
+                    if !viewModel.workoutTitle.isEmpty {
+                        let newWorkout = Workout(title: viewModel.workoutTitle)
                         workouts.append(newWorkout)
                         dismiss()
                     }

@@ -9,10 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     
-    @State private var isMenuOpen: Bool = false
-    @State private var showStatistics: Bool = false
-    @State private var addWorkoutIsPresented: Bool = false
-    @State private var workouts: [Workout] = [Workout(title: "Arms/Legs", date: Date(), isCompleted: false, exercises: [Exercise(name: "Barbell Curl", sets: 2, reps: 8, weight: 20)])]
+    @State private var viewModel = HomeViewModel()
     
         var body: some View {
             NavigationStack {
@@ -29,14 +26,14 @@ struct HomeView: View {
                                 .listRowBackground(Color.clear)
                                 .listRowSeparator(.hidden)
                                 .listRowInsets(EdgeInsets())
-                            ForEach($workouts) { $workout in
+                            ForEach($viewModel.workouts) { $workout in
                                 ListCellView(workout: $workout)
                                     .listRowBackground(Color.clear)
                                     .listRowSeparator(.hidden)
                                     .listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
                             }
                             .onDelete { indexSet in
-                                workouts.remove(atOffsets: indexSet)
+                                viewModel.workouts.remove(atOffsets: indexSet)
                             }
                         }
                         .listStyle(.plain)
@@ -46,7 +43,7 @@ struct HomeView: View {
                     }
                     .overlay(alignment: .bottom) {
                         Button {
-                            addWorkoutIsPresented = true
+                            viewModel.addWorkoutIsPresented = true
                         } label: {
                             Image(systemName: "plus")
                                 .font(.system(size: 24, weight: .medium))
@@ -55,32 +52,32 @@ struct HomeView: View {
                                 .background(Color.button)
                                 .clipShape(Circle())
                         }
-                        .sheet(isPresented: $addWorkoutIsPresented) {
-                            AddWorkoutView(workouts: $workouts)
+                        .sheet(isPresented: $viewModel.addWorkoutIsPresented) {
+                            AddWorkoutView(workouts: $viewModel.workouts)
                                 .presentationDragIndicator(.visible)
                         }
                     }
-                    if isMenuOpen {
+                    if viewModel.isMenuOpen {
                         Color.black.opacity(0.4)
                             .ignoresSafeArea()
                             .onTapGesture {
-                                withAnimation(.easeInOut) { isMenuOpen = false }
+                                withAnimation(.easeInOut) { viewModel.isMenuOpen = false }
                             }
-                        SettingsView(isMenuOpen: $isMenuOpen, showStatistics: $showStatistics)
+                        SettingsView(isMenuOpen: $viewModel.isMenuOpen, showStatistics: $viewModel.showStatistics)
                             .transition(.move(edge: .trailing))
                             .zIndex(1)
                     }
                 }
-                .fullScreenCover(isPresented: $showStatistics, content: {
-                    StatisticsView(workouts: $workouts)
+                .fullScreenCover(isPresented: $viewModel.showStatistics, content: {
+                    StatisticsView(workouts: $viewModel.workouts)
                 })
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button {
-                            withAnimation(.spring()) { isMenuOpen.toggle() }
+                            withAnimation(.spring()) { viewModel.isMenuOpen.toggle() }
                         } label: {
-                            Image(systemName: isMenuOpen ? "xmark" : "line.3.horizontal")
+                            Image(systemName: viewModel.isMenuOpen ? "xmark" : "line.3.horizontal")
                                 .foregroundStyle(.white)
                                 .font(.system(size: 20))
                         }
