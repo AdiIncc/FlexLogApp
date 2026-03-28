@@ -11,7 +11,6 @@ struct SettingsView: View {
     @Environment(UserSession.self) var session: UserSession
     @Binding var isMenuOpen: Bool
     @AppStorage("measure_unit") private var measureUnit: MeasureUnitModel = .kg
-    @Binding var showStatistics: Bool
     
     var body: some View {
         ZStack(alignment: .trailing) {
@@ -28,12 +27,15 @@ struct SettingsView: View {
                                 Text("Hi, \(session.currentUser?.username ?? "Guest")")
                                     .foregroundStyle(Color.text)
                                     .font(.system(size: 20, weight: .bold))
+                                
                                 Rectangle()
                                     .fill(.white)
                                     .frame(height: 1)
+                                
                                 Text("Settings")
                                     .font(.system(size: 18, weight: .bold))
                                     .foregroundStyle(Color.text)
+                                
                                 Picker("Unit", selection: $measureUnit) {
                                     ForEach(MeasureUnitModel.allCases) { unit in
                                         Text(unit.rawValue.uppercased())
@@ -41,13 +43,7 @@ struct SettingsView: View {
                                     }
                                 }
                                 .tint(.button)
-                                Button {
-                                    isMenuOpen = false
-                                    showStatistics = true
-                                } label: {
-                                    Text("My statistics")
-                                }
-                                .foregroundStyle(.button)
+                                
                                 Spacer()
                             }
                         }
@@ -59,6 +55,6 @@ struct SettingsView: View {
 }
 
 #Preview {
-    SettingsView(isMenuOpen: .constant(true), showStatistics: .constant(false))
+    SettingsView(isMenuOpen: .constant(true))
         .environment(UserSession())
 }

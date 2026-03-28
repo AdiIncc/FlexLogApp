@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ListCellView: View {
     @Binding var workout: Workout
-    @State private var showExercises = false
+    let onShowExercises: () -> Void
     
     var body: some View {
         ZStack {
@@ -24,7 +24,7 @@ struct ListCellView: View {
                                 .foregroundStyle(.white)
                             Spacer()
                             Button {
-                                showExercises = true
+                                onShowExercises()
                             } label: {
                                 Image(systemName: "ellipsis")
                                     .font(.system(size: 20))
@@ -33,10 +33,12 @@ struct ListCellView: View {
                         }
                         .padding(.horizontal)
                         .frame(maxHeight: .infinity)
+                        
                         Rectangle()
                             .fill(.white)
                             .frame(height: 1)
                             .frame(maxWidth: .infinity)
+                        
                         HStack(alignment: .center) {
                             Text(workout.title)
                                 .font(.system(size: 16, weight: .semibold))
@@ -57,13 +59,11 @@ struct ListCellView: View {
                     }
                 )
                 .padding(.horizontal)
-                .navigationDestination(isPresented: $showExercises) {
-                    ExerciseView(workout: $workout)
-                }
         }
     }
 }
 
+
 #Preview {
-    ListCellView(workout: .constant(Workout(title: "aeag", date: Date(), isCompleted: false, exercises: [Exercise(name:"aage", sets: 1, reps: 2, weight: 34)])))
+    ListCellView(workout: .constant(Workout(title: "aeag", date: Date(), isCompleted: false, exercises: [Exercise(id: UUID(), name:"aage", sets: 1, reps: 2, weight: 34)])), onShowExercises: {})
 }

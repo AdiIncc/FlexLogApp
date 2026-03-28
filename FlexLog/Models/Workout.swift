@@ -7,12 +7,21 @@
 
 import Foundation
 
-struct Workout: Identifiable {
-    let id = UUID()
+struct Workout: Identifiable, Equatable {
+    
+    let id: UUID
     var title: String
     var date: Date
     var isCompleted: Bool
     var exercises: [Exercise]
+    
+    static func == (lhs: Workout, rhs: Workout) -> Bool {
+        return lhs.id == rhs.id &&
+        lhs.title == rhs.title &&
+        lhs.date == rhs.date &&
+        lhs.isCompleted == rhs.isCompleted &&
+        lhs.exercises == rhs.exercises
+    }
     
     var createdDate: String {
         let dateFormatter = DateFormatter()
@@ -21,7 +30,8 @@ struct Workout: Identifiable {
         return dateFormatter.string(from: date)
     }
     
-    init(title: String, date: Date = Date(), isCompleted: Bool = false, exercises: [Exercise] = []) {
+    init(id: UUID = UUID(),title: String, date: Date = Date(), isCompleted: Bool = false, exercises: [Exercise] = []) {
+        self.id = id
         self.title = title
         self.date = date
         self.isCompleted = isCompleted

@@ -27,7 +27,7 @@ class ExerciseViewModel {
               let weight = Double(weight.replacingOccurrences(of: ",", with: ".")) else {
             return
         }
-        let newExercise = Exercise(name: exerciseName, sets: sets, reps: reps, weight: weight)
+        let newExercise = Exercise(id: UUID(), name: exerciseName, sets: sets, reps: reps, weight: weight)
         withAnimation(.spring()) {
             workout.wrappedValue.exercises.append(newExercise)
         }

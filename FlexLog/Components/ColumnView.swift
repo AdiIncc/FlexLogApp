@@ -30,6 +30,7 @@ struct ColumnView: View {
                             .stroke(Color.white.opacity(0.3), lineWidth: 1)
                     )
                     .foregroundStyle(.white)
+                    .autocorrectionDisabled()
                 }
     }
     

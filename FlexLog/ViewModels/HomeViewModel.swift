@@ -12,5 +12,5 @@ class HomeViewModel {
     var isMenuOpen: Bool = false
     var showStatistics: Bool = false
     var addWorkoutIsPresented: Bool = false
-    var workouts: [Workout] = [Workout(title: "Arms/Legs", date: Date(), isCompleted: false, exercises: [Exercise(name: "Barbell Curl", sets: 2, reps: 8, weight: 20)])]
+    var workouts: [Workout] = [Workout(title: "Arms/Legs", date: Date(), isCompleted: false, exercises: [Exercise(id: UUID(), name: "Barbell Curl", sets: 2, reps: 8, weight: 20)])]
 }

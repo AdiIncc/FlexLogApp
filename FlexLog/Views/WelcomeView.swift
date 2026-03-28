@@ -30,8 +30,6 @@ struct WelcomeView: View {
                         .foregroundStyle(Color.text)
                     TextField("Username", text: $viewModel.username)
                         .textFieldStyle(MainTextField())
-                        .autocorrectionDisabled()
-                        .textInputAutocapitalization(.never)
                     Text("The username should be at least 3 characters long.")
                         .font(.system(size: 14, weight: .semibold))
                         .foregroundStyle(Color.text)
@@ -69,7 +67,6 @@ struct WelcomeView: View {
                                         withAnimation(.spring()) {
                                             viewModel.offset = maxOffSet
                                             session.currentUser = User(id: UUID(), username: viewModel.username)
-                                            viewModel.isLogged = true
                                         }
                                     }
                                     else {
@@ -89,9 +86,7 @@ struct WelcomeView: View {
                 .padding(.horizontal, 15)
             }
         }
-        .fullScreenCover(isPresented: $viewModel.isLogged) {
-            HomeView()
-        }
+
     }
 }
 
